@@ -1,0 +1,21 @@
+{
+  "name": "conjugation-fr",
+  "version": "0.1.1",
+  "description": "A Node.js module for fast conjugation of french verbs.",
+  "homepage": "https://www.lordmorgoth.net/API/conjugation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "conjugation",
+    "conjugaison",
+    "french",
+    "francais",
+    "français",
+    "verbes",
+    "verbs"
+  ],
+  "author": "LordMorgoth",
+  "license": "GPL-2.0"
+}
