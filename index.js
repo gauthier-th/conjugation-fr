@@ -333,69 +333,106 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 
 	let countTerm = 0;
 	if (!Array.isArray(conjugation[t][mode][tense])) {
+		console.log("!!");
 		Object.keys(conjugation[t][mode][tense]).forEach(pronoun => {
 			if (pronominal) {
 				result.push({
 					pronoun,
-					pronounIndex: pronouns[pronoun],
+					pronounIndex: pronouns[pronoun] !== undefined ? pronouns[pronoun] : -1,
 					verb: replacePronominal(ant + conjugation[t][mode][tense][pronoun], pronominalForms[0])
 				});
 			}
 			else {
 				result.push({
 					pronoun,
-					pronounIndex: pronouns[pronoun],
+					pronounIndex: pronouns[pronoun] !== undefined ? pronouns[pronoun] : -1,
 					verb: ant + conjugation[t][mode][tense][pronoun]
+				});
+			}
+			if (tense === "past-participle") {
+				let pVerb;
+				if (pronominal)
+					pVerb = "être";
+				else
+					pVerb = verbs[cVerb].aux;
+				const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
+				const pronominalAnt = pronominal ? "s'" : "";
+				result.push({
+					pronoun,
+					pronounIndex: pronouns[pronoun] !== undefined ? pronouns[pronoun] : -1,
+					verb: pronominalAnt + participleAnt + " " + ant + conjugation[t][mode][tense][pronoun]
 				});
 			}
 		});
 	}
 	else {
-		conjugation[t][mode][tense].forEach(term => {
-			let pronoun = tensesInfos[tense].pronouns[countTerm].pronoun;
-			const pronounIndex = tensesInfos[tense].pronouns[countTerm].index;
-			let conjugVerb = "";
-			if ("i" in term) {
+		if (tense === "past-participle") {
+			const term = !fGender ? conjugation[t][mode][tense][0] : conjugation[t][mode][tense][2];
+			if (!pronominal) {
 				if (Array.isArray(term.i))
-					conjugVerb = ant + term.i.join("/" + ant);
-				else if (typeof term.i === "string")
-					conjugVerb = ant + term.i;
+					result.push({ pronoun: 'i', pronounIndex: -1, verb: ant + term.i[0] });
+				else
+					result.push({ pronoun: 'i', pronounIndex: -1, verb: ant + term.i });
 			}
-			else {
-				pronoun = Object.keys(term)[0];
-				if (Array.isArray(term[pronoun]))
-					conjugVerb = ant + term[pronoun].join("/" + ant);
-				else if (typeof term[pronoun] === "string")
-					conjugVerb = ant + term[pronoun];
-			}
-			if (conjugVerb !== "") {
-				if (pronoun === "je" && ["a", "e", "i", "o", "u", "y"].includes(conjugVerb.substring(0, 1)))
-					pronoun = "j'";
-				if (mode === "subjunctive") {
-					if (["a", "e", "i", "o", "u", "y"].includes(pronoun.substring(0, 1)))
-						pronoun = "qu'" + pronoun;
-					else
-						pronoun = "que " + pronoun;
-				}
-				if (fGender)
-					pronoun = pronoun.replace("il", "elle");
-				if (pronominal) {
-					result.push({
-						pronoun,
-						pronounIndex,
-						verb: replacePronominal(conjugVerb + suffix + ((suffix != "" && verb === "être" && pronounIndex > 2) ? "s" : ""), pronominalForms[pronounIndex])
-					});
+			let pVerb;
+			if (pronominal)
+				pVerb = "être";
+			else
+				pVerb = verbs[cVerb].aux;
+			const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
+			const pronominalAnt = pronominal ? "s'" : "";
+			if (Array.isArray(term.i))
+				result.push({ pronoun: 'i', pronounIndex: -1, verb: pronominalAnt + participleAnt + " " + ant + term.i[0] });
+			else
+				result.push({ pronoun: 'i', pronounIndex: -1, verb: pronominalAnt + participleAnt + " "+ ant + term.i });
+		}
+		else {
+			conjugation[t][mode][tense].forEach(term => {
+				let pronoun = tensesInfos[tense].pronouns[countTerm].pronoun;
+				const pronounIndex = tensesInfos[tense].pronouns[countTerm].index !== undefined ? tensesInfos[tense].pronouns[countTerm].index : -1;
+				let conjugVerb = "";
+				if ("i" in term) {
+					if (Array.isArray(term.i))
+						conjugVerb = ant + term.i.join("/" + ant);
+					else if (typeof term.i === "string")
+						conjugVerb = ant + term.i;
 				}
 				else {
-					result.push({
-						pronoun,
-						pronounIndex,
-						verb: conjugVerb + suffix + ((suffix != "" && verb === "être" && pronounIndex > 2) ? "s" : "")
-					});
+					pronoun = Object.keys(term)[0];
+					if (Array.isArray(term[pronoun]))
+						conjugVerb = ant + term[pronoun].join("/" + ant);
+					else if (typeof term[pronoun] === "string")
+						conjugVerb = ant + term[pronoun];
 				}
-			}
-			countTerm++;
-		});
+				if (conjugVerb !== "") {
+					if (pronoun === "je" && ["a", "e", "i", "o", "u", "y"].includes(conjugVerb.substring(0, 1)))
+						pronoun = "j'";
+					if (mode === "subjunctive") {
+						if (["a", "e", "i", "o", "u", "y"].includes(pronoun.substring(0, 1)))
+							pronoun = "qu'" + pronoun;
+						else
+							pronoun = "que " + pronoun;
+					}
+					if (fGender)
+						pronoun = pronoun.replace("il", "elle");
+					if (pronominal) {
+						result.push({
+							pronoun,
+							pronounIndex,
+							verb: replacePronominal(conjugVerb + suffix + ((suffix != "" && verb === "être" && pronounIndex > 2) ? "s" : ""), pronominalForms[pronounIndex])
+						});
+					}
+					else {
+						result.push({
+							pronoun,
+							pronounIndex,
+							verb: conjugVerb + suffix + ((suffix != "" && verb === "être" && pronounIndex > 2) ? "s" : "")
+						});
+					}
+				}
+				countTerm++;
+			});
+		}
 	}
 	return result;
 }
