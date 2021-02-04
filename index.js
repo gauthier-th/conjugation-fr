@@ -314,6 +314,8 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 			verb = "être";
 		else
 			verb = verbs[cVerb].aux;
+		if (Array.isArray(verb))
+			verb = verb[0];
 		tense = composedTenses[cTense].tense;
 		mode = composedTenses[cTense].mode;
 
