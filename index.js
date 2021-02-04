@@ -287,7 +287,7 @@ function findTenseByMode(cMode, input) {
 		return tense;
 }
 
-function conjugate(cVerb, cMode, cTense, fGender = false) {
+function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 	let pronominal = /^s'\s*([aâàäeéèêëiîïoöôuùûüyÿ].*)$/gi.exec(cVerb);
 	if (pronominal) {
 		cVerb = pronominal[1];
@@ -312,10 +312,15 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 	if (cTense in composedTenses) {
 		if (pronominal)
 			verb = "être";
-		else
+		else {
 			verb = verbs[cVerb].aux;
-		if (Array.isArray(verb))
-			verb = verb[0];
+			if (Array.isArray(verb)) {
+				if (!forceAux)
+					verb = verb[0];
+				else
+					verb = forceAux;
+			}
+		}
 		tense = composedTenses[cTense].tense;
 		mode = composedTenses[cTense].mode;
 
@@ -335,7 +340,6 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 
 	let countTerm = 0;
 	if (!Array.isArray(conjugation[t][mode][tense])) {
-		console.log("!!");
 		Object.keys(conjugation[t][mode][tense]).forEach(pronoun => {
 			if (pronominal) {
 				result.push({
@@ -355,8 +359,15 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 				let pVerb;
 				if (pronominal)
 					pVerb = "être";
-				else
+				else {
 					pVerb = verbs[cVerb].aux;
+					if (Array.isArray(pVerb)) {
+						if (!forceAux)
+							pVerb = pVerb[0];
+						else
+							pVerb = forceAux;
+					}
+				}
 				const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
 				const pronominalAnt = pronominal ? "s'" : "";
 				result.push({
@@ -379,8 +390,15 @@ function conjugate(cVerb, cMode, cTense, fGender = false) {
 			let pVerb;
 			if (pronominal)
 				pVerb = "être";
-			else
+			else {
 				pVerb = verbs[cVerb].aux;
+				if (Array.isArray(pVerb)) {
+					if (!forceAux)
+						pVerb = pVerb[0];
+					else
+						pVerb = forceAux;
+				}
+			}
 			const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
 			const pronominalAnt = pronominal ? "s'" : "";
 			if (Array.isArray(term.i))

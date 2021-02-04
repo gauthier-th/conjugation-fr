@@ -5,9 +5,10 @@ This package is based on the Verbiste database.
 It contains more than 7000 verbs.
 ## Usage
 ### Simple conjugation
-Syntaxe: `conjugationFR#conjugate(verb, mode, tense, fGender = false)`
+Syntaxe: `conjugationFR#conjugate(verb, mode, tense, fGender = false, forceAux)`
 It supports pronominial forms.
 By default, gender is masculine. Set `fGender` to `true` to agree to feminine gender.
+For verbs with two auxiliary, you can specify which one with `forceAux`.
 Example:
 ```js
 const conjugationFR = require("conjugation-fr");

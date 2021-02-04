@@ -1,6 +1,6 @@
 {
   "name": "conjugation-fr",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "A Node.js module for fast conjugation of french verbs.",
   "homepage": "https://lordmorgoth.net/API/conjugation",
   "repository": {
