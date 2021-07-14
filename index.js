@@ -16,6 +16,14 @@
 const verbs = require("./verbs-fr.json");
 const conjugation = require("./conjugation-fr.json");
 
+/**
+ * @typedef {{
+ *  pronoun: string,
+ *  pronounIndex: number,
+ *  verb: string
+ * }} Conjugation
+ */
+
 const structure = {
 	infinitive: [
 		"infinitive-present"
@@ -242,7 +250,14 @@ const pronominalForms = [
 	"se"
 ]
 
-function findTense(verb, input, fGender = false) {
+/**
+ * @param {string} verb Verb to conjugate
+ * @param {string} input Tense and mode to find conjugation
+ * @param {boolean} [fGender] Whether to agree with the feminine gender (optionnal)
+ * @param {string} [forceAux] Force a specific auxiliary
+ * @returns {Conjugation[]}
+ */
+function findTense(verb, input, fGender = false, forceAux = null) {
 	verb = verb.toLowerCase();
 	input = input.toLowerCase();
 	let mode = "";
@@ -264,7 +279,7 @@ function findTense(verb, input, fGender = false) {
 	}
 	else
 		tense = findTenseByMode(mode, input);
-	return conjugate(verb, mode, tense, fGender);
+	return conjugate(verb, mode, tense, fGender, forceAux);
 }
 
 function findTenseByMode(cMode, input) {
@@ -287,6 +302,14 @@ function findTenseByMode(cMode, input) {
 		return tense;
 }
 
+/**
+ * @param {string} cVerb Verb to conjugate
+ * @param {string} cMode Mode for the conjugation
+ * @param {string} cTense Tense for the conjugation
+ * @param {boolean} [fGender] Whether to agree with the feminine gender (optionnal)
+ * @param {string} [forceAux] Force a specific auxiliary
+ * @returns {Conjugation[]}
+ */
 function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 	let pronominal = /^s'\s*([aâàäeéèêëiîïoöôuùûüyÿ].*)$/gi.exec(cVerb);
 	if (pronominal) {
@@ -466,22 +489,36 @@ function replacePronominal(verb, pronominalForm) {
 		return pronominalForm + " " + verb;
 }
 
-
+/**
+ * Error triggered when a word is not found in the dictionary
+ */
 class UnknownVerbError extends Error {
+	/** @param {string} message The error message */
 	constructor(message) {
 		super(message);
+		/** @type {string} */
 		this.name = "UnknownVerbError";
 	}
 }
+/**
+ * Error triggered when a mode is not found in the dictionary
+ */
 class UnknownModeError extends Error {
+	/** @param {string} message The error message */
 	constructor(message) {
 		super(message);
+		/** @type {string} */
 		this.name = "UnknownModeError";
 	}
 }
+/**
+ * Error triggered when a tense is not found in the dictionary
+ */
 class UnknownTenseError extends Error {
+	/** @param {string} message The error message */
 	constructor(message) {
 		super(message);
+		/** @type {string} */
 		this.name = "UnknownTenseError";
 	}
 }

@@ -1,14 +1,15 @@
 {
   "name": "conjugation-fr",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A Node.js module for fast conjugation of french verbs.",
-  "homepage": "https://lordmorgoth.net/API/conjugation",
+  "homepage": "https://github.com/gauthier-th/conjugation-fr#readme",
   "repository": {
-	"type" : "git",
-	"url" : "https://github.com/gauthier-th/conjugation-fr"
+    "type" : "git",
+    "url" : "https://github.com/gauthier-th/conjugation-fr"
   },
   "main": "index.js",
   "scripts": {
+    "typescript": "npx typescript index.js --declaration --allowJs --emitDeclarationOnly --outDir types",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -20,6 +21,6 @@
     "verbes",
     "verbs"
   ],
-  "author": "LordMorgoth",
+  "author": "gauthier-th",
   "license": "GPL-2.0"
 }
