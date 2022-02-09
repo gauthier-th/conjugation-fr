@@ -352,7 +352,7 @@ function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 		if (cT.match("[^:]+:[^:]+"))
 			cAnt += cVerb.replace(new RegExp(cT.split(":")[1] + "$"), "");
 
-		suffix = " " + cAnt + conjugation[cT].participle["past-participle"][0].i;
+		suffix = " " + cAnt + (conjugation[cT].participle["past-participle"]?.[0]?.i || conjugation[cT].participle["past-participle"].i);
 
 		if (verb === "être" && fGender)
 			suffix += "e";
