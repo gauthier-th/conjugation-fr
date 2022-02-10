@@ -448,10 +448,10 @@ function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 						conjugVerb = ant + term[pronoun];
 				}
 				if (conjugVerb !== "") {
-					if (pronoun === "je" && ["a", "e", "i", "o", "u", "y"].includes(conjugVerb.substring(0, 1)))
+					if (pronoun === "je" && ["a", "e", "i", "o", "u", "y"].includes(removeAccents(conjugVerb.substring(0, 1))))
 						pronoun = "j'";
 					if (mode === "subjunctive") {
-						if (["a", "e", "i", "o", "u", "y"].includes(pronoun.substring(0, 1)))
+						if (["a", "e", "i", "o", "u", "y"].includes(removeAccents(pronoun.substring(0, 1))))
 							pronoun = "qu'" + pronoun;
 						else
 							pronoun = "que " + pronoun;
@@ -487,6 +487,10 @@ function replacePronominal(verb, pronominalForm) {
 	}
 	else
 		return pronominalForm + " " + verb;
+}
+
+function removeAccents(text) {
+	return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 /**
