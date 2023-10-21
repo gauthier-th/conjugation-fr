@@ -342,6 +342,8 @@ function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 					verb = verb[0];
 				else
 					verb = forceAux;
+			} else if (forceAux) {
+				verb = forceAux;
 			}
 		}
 		tense = composedTenses[cTense].tense;
@@ -389,6 +391,8 @@ function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 							pVerb = pVerb[0];
 						else
 							pVerb = forceAux;
+					} else if (forceAux) {
+						pVerb = forceAux;
 					}
 				}
 				const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
@@ -420,6 +424,8 @@ function conjugate(cVerb, cMode, cTense, fGender = false, forceAux = null) {
 						pVerb = pVerb[0];
 					else
 						pVerb = forceAux;
+				} else if (forceAux) {
+					pVerb = forceAux;
 				}
 			}
 			const participleAnt = conjugation[verbs[pVerb].t]["participle"]["present-participle"].i;
