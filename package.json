@@ -1,6 +1,6 @@
 {
   "name": "conjugation-fr",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A Node.js module for fast conjugation of french verbs.",
   "homepage": "https://github.com/gauthier-th/conjugation-fr#readme",
   "repository": {
